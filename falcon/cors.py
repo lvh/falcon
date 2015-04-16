@@ -1,4 +1,5 @@
 from collections import namedtuple
+from functools import partial
 
 Parameters = namedtuple('Parameters', ('origin', 'method', 'headers'))
 
@@ -7,21 +8,16 @@ def _allow_all(parameters):
 
 allow_all_origins = allow_all_methods = _allow_all
 
-def allow_origins(origins):
-    allowed_origins = frozenset(origins)
+def _allow_some(attr, vals):
+    allowed = frozenset(vals)
 
     def pred(parameters):
-        return parameters.origin in allowed_origins
+        return getattr(parameters, attr) in vals
 
     return pred
 
-def allow_methods(methods):
-    allowed_methods = frozenset(methods)
-
-    def pred(parameters):
-        return parameters.method in allowed_methods
-
-    return pred
+allow_origins = partial(_allow_some, "origin")
+allow_methods = partial(_allow_some, "method")
 
 def pred_all(preds):
     return lambda *a, **kw: all(p(*a, **kw) for p in preds)
