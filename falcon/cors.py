@@ -2,8 +2,10 @@ from collections import namedtuple
 
 Parameters = namedtuple('Parameters', ('origin', 'method', 'headers'))
 
-def allow_all_origins(parameters):
+def _allow_all(parameters):
     return True
+
+allow_all_origins = allow_all_methods = _allow_all
 
 def allow_origins(origins):
     allowed_origins = frozenset(origins)
@@ -12,9 +14,6 @@ def allow_origins(origins):
         return parameters.origin in allowed_origins
 
     return pred
-
-def allow_all_methods(parameters):
-    return True
 
 def allow_methods(methods):
     allowed_methods = frozenset(methods)
