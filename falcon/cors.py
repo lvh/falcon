@@ -23,3 +23,6 @@ def allow_methods(methods):
         return parameters.method in allowed_methods
 
     return pred
+
+def pred_all(preds):
+    return lambda *a, **kw: all(p(*a, **kw) for p in preds)
