@@ -43,6 +43,29 @@ class CORSTests(testtools.TestCase):
                   cors.Parameters('example.bogus', 'HEAD', 'YOLO')]:
             self.assertFalse(pred(p))
 
+    def test_multi_composed(self):
+        pred = cors.pred_any([
+            cors.pred_all([
+                cors.allow_methods(['HEAD']),
+                cors.allow_origins(['example-one.test'])
+            ]),
+            cors.pred_all([
+                cors.allow_methods(['GET', 'POST']),
+                cors.allow_origins(['example-two.test'])
+            ]),
+        ])
+
+        for p in [cors.Parameters('example-one.test', 'HEAD', 'YOLO'),
+                  cors.Parameters('example-two.test', 'GET', 'YOLO'),
+                  cors.Parameters('example-two.test', 'POST', 'YOLO')]:
+            self.assertTrue(pred(p))
+
+        for p in [cors.Parameters('example-one.test', 'GET', 'YOLO'),
+                  cors.Parameters('example-two.test', 'DELETE', 'YOLO'),
+                  cors.Parameters('example.bogus', 'HEAD', 'YOLO')]:
+            self.assertFalse(pred(p))
+
+
 
 class PredicateToolsTests(testtools.TestCase):
     def test_pred_all_constantly_true(self):
