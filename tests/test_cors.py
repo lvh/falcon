@@ -66,48 +66,42 @@ class CORSTests(testtools.TestCase):
             self.assertFalse(pred(p))
 
 
+def constantly_true(*a, **kw):
+    return True
+
+
+def constantly_false(*a, **kw):
+    return False
+
 
 class PredicateToolsTests(testtools.TestCase):
     def test_pred_all_constantly_true(self):
-        constantly_true = lambda *a, **kw: True
 
         p = cors.pred_all([constantly_true, constantly_true])
         for arg in [cors.Parameters('YOLO', 'POST', 'YOLO')]:
             self.assertTrue(p(arg))
 
     def test_pred_all_constantly_false(self):
-        constantly_false = lambda *a, **kw: False
-
         p = cors.pred_any([constantly_false, constantly_false])
         for arg in [cors.Parameters('YOLO', 'POST', 'YOLO')]:
             self.assertFalse(p(arg))
 
     def test_pred_all_mixed(self):
-        constantly_true = lambda *a, **kw: True
-        constantly_false = lambda *a, **kw: False
-
         p = cors.pred_all([constantly_true, constantly_false])
         for arg in [cors.Parameters('YOLO', 'POST', 'YOLO')]:
             self.assertFalse(p(arg))
 
     def test_pred_any_constantly_true(self):
-        constantly_true = lambda *a, **kw: True
-
         p = cors.pred_any([constantly_true, constantly_true])
         for arg in [cors.Parameters('YOLO', 'POST', 'YOLO')]:
             self.assertTrue(p(arg))
 
     def test_pred_any_constantly_false(self):
-        constantly_false = lambda *a, **kw: False
-
         p = cors.pred_any([constantly_false, constantly_false])
         for arg in [cors.Parameters('YOLO', 'POST', 'YOLO')]:
             self.assertFalse(p(arg))
 
     def test_pred_any_mixed(self):
-        constantly_true = lambda *a, **kw: True
-        constantly_false = lambda *a, **kw: False
-
         p = cors.pred_any([constantly_true, constantly_false])
         for arg in [cors.Parameters('YOLO', 'POST', 'YOLO')]:
             self.assertTrue(p(arg))
