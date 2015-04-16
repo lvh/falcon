@@ -7,4 +7,6 @@ class CORSTests(testtools.TestCase):
         for p in [cors.Parameters("YOLO", "YOLO", "YOLO")]:
             self.assertTrue(cors.allow_all_origins(p))
 
-    def test_allow
+    def test_allow_all_methods(self):
+        for p in [cors.Parameters("YOLO", "YOLO", "YOLO")]:
+            self.assertTrue(cors.allow_all_methods(p))
