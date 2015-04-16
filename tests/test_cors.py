@@ -30,6 +30,20 @@ class CORSTests(testtools.TestCase):
         for p in [cors.Parameters('YOLO', 'POST', 'YOLO')]:
             self.assertFalse(pred(p))
 
+    def test_composed(self):
+        pred = cors.pred_all([
+            cors.allow_methods(['HEAD']),
+            cors.allow_origins(['example.test'])
+        ])
+
+        for p in [cors.Parameters('example.test', 'HEAD', 'YOLO')]:
+            self.assertTrue(pred(p))
+
+        for p in [cors.Parameters('example.test', 'POST', 'YOLO'),
+                  cors.Parameters('example.bogus', 'HEAD', 'YOLO')]:
+            self.assertFalse(pred(p))
+
+
 class PredicateToolsTests(testtools.TestCase):
     def test_pred_all_constantly_true(self):
         constantly_true = lambda *a, **kw: True
