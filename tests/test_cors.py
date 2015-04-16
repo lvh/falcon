@@ -52,6 +52,13 @@ class PredicateToolsTests(testtools.TestCase):
         for arg in [cors.Parameters('YOLO', 'POST', 'YOLO')]:
             self.assertTrue(p(arg))
 
+    def test_pred_all_constantly_false(self):
+        constantly_false = lambda *a, **kw: False
+
+        p = cors.pred_any([constantly_false, constantly_false])
+        for arg in [cors.Parameters('YOLO', 'POST', 'YOLO')]:
+            self.assertFalse(p(arg))
+
     def test_pred_all_mixed(self):
         constantly_true = lambda *a, **kw: True
         constantly_false = lambda *a, **kw: False
