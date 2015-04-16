@@ -21,3 +21,6 @@ allow_methods = partial(_allow_some, "method")
 
 def pred_all(preds):
     return lambda *a, **kw: all(p(*a, **kw) for p in preds)
+
+def pred_any(preds):
+    return lambda *a, **kw: any(p(*a, **kw) for p in preds)
